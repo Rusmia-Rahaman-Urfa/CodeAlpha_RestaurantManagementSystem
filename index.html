@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMIÈRE | Fine Dining Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --stone-100: #f5f5f4; 
+            --stone-800: #292524;
+            --taupe: #a8a29e;
+        }
+        body { 
+            background-color: white; 
+            color: var(--stone-800); 
+            font-family: 'Inter', sans-serif; 
+        }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        /* Full screen Hero Background */
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            height: 85vh;
+        }
+
+        .nav-link {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--stone-800);
+            transition: opacity 0.3s;
+        }
+        .nav-link:hover { opacity: 0.5; }
+
+        .btn-outline {
+            border: 1px solid white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: white;
+            transition: all 0.3s;
+        }
+        .btn-outline:hover { background: white; color: black; }
+
+        /* Brand logos strip at bottom */
+        .brand-footer {
+            background: #1c1917;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="flex justify-between items-center px-12 py-6 border-b border-stone-100 bg-white sticky top-0 z-50">
+        <div class="flex gap-8">
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Restaurants</a>
+            <a href="#" class="nav-link">Shop</a>
+        </div>
+        
+        <h1 class="text-2xl font-serif tracking-widest uppercase">Lumière</h1>
+
+        <div class="flex gap-8 items-center">
+            <a href="#" class="nav-link">Careers</a>
+            <a href="#" class="nav-link">News</a>
+            <div class="flex gap-4 ml-4">
+                <span class="opacity-30">|</span>
+                <button class="nav-link">Admin</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section flex flex-col items-center justify-center text-center text-white">
+        <h2 class="text-7xl font-serif mb-8 tracking-tight">Our Kitchens</h2>
+        <button class="btn-outline">Book a Table</button>
+    </section>
+
+    <main class="max-w-7xl mx-auto py-24 px-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 mb-4 block">Kitchen Intelligence</span>
+                <h3 class="text-4xl font-serif mb-6 leading-tight">Automated Inventory <br>& Real-time Orders.</h3>
+                <p class="text-stone-500 text-sm leading-relaxed mb-8">
+                    Monitor your ingredients, manage table reservations, and track daily sales from a single, minimalist interface designed for elite culinary operations.
+                </p>
+                <div class="flex gap-12">
+                    <div>
+                        <p class="text-2xl font-serif">14 / 20</p>
+                        <p class="text-[9px] uppercase font-bold text-stone-400">Tables Active</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-serif text-red-500">03</p>
+                        <p class="text-[9px] uppercase font-bold text-stone-400">Stock Alerts</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-stone-50 p-10 rounded-2xl border border-stone-200">
+                <div class="flex justify-between items-center mb-10">
+                    <h4 class="text-xs font-bold uppercase tracking-widest">Live Menu Flux</h4>
+                    <span class="text-[10px] bg-green-100 text-green-700 px-3 py-1 rounded-full uppercase font-bold">Live</span>
+                </div>
+                <div class="space-y-6">
+                    <div class="flex justify-between border-b border-stone-200 pb-4">
+                        <span class="text-sm">Dry Aged Ribeye</span>
+                        <span class="text-sm font-semibold">$58.00</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stone-200 pb-4">
+                        <span class="text-sm">Wild Seabass</span>
+                        <span class="text-sm font-semibold">$42.00</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stone-200 pb-4">
+                        <span class="text-sm">Truffle Risotto</span>
+                        <span class="text-sm font-semibold">$36.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="brand-footer">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
+            <span class="text-white font-serif text-xl px-4">L'Enclume</span>
+            <span class="text-white font-serif text-xl px-4">Rogan & Co</span>
+            <span class="text-white font-serif text-xl px-4">Aulis</span>
+            <span class="text-white font-serif text-xl px-4">Henrock</span>
+            <span class="text-white font-serif text-xl px-4">Roganic</span>
+            <span class="text-white font-serif text-xl px-4">Our Farm</span>
+        </div>
+    </footer>
+
+</body>
+</html>
