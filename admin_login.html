@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LUMIÈRE | Admin Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy: #0B132B; --gold: #C5A059; --espresso: #2C1810; }
+        body { background: var(--navy); font-family: 'Tenor Sans', sans-serif; color: white; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        input {
+            background: rgba(11, 19, 43, 0.6);
+            border: 1px solid var(--espresso);
+            color: white;
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(197, 160, 89, 0.2); }
+    </style>
+</head>
+<body class="h-screen flex items-center justify-center p-6">
+    <div class="glass-panel w-full max-w-md p-12 rounded-sm text-center">
+        <h1 class="font-[Cinzel] text-3xl tracking-[0.4em] mb-2">LUMIÈRE</h1>
+        <p class="text-[10px] tracking-[0.3em] uppercase text-[#C5A059] mb-12">Intelligence Portal</p>
+        
+        <form class="space-y-6 text-left">
+            <div>
+                <label class="text-[9px] uppercase tracking-widest text-gray-500 mb-2 block">Administrator ID</label>
+                <input type="text" class="w-full p-4 text-sm tracking-widest" placeholder="ENTER ID">
+            </div>
+            <div>
+                <label class="text-[9px] uppercase tracking-widest text-gray-500 mb-2 block">Security Key</label>
+                <input type="password" class="w-full p-4 text-sm tracking-widest" placeholder="••••••••">
+            </div>
+            <button type="button" class="w-full bg-[#C5A059] text-[#0B132B] py-4 text-[11px] font-bold tracking-[0.3em] uppercase hover:bg-white transition-all duration-500 mt-4">
+                Authenticate
+            </button>
+        </form>
+        <a href="#" class="text-[9px] text-gray-600 uppercase tracking-widest mt-8 inline-block hover:text-white transition">Forgot Credentials?</a>
+    </div>
+</body>
+</html>
