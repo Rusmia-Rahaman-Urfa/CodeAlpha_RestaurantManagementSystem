@@ -3,139 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LUMIÈRE | Fine Dining Management</title>
+    <title>LUMIÈRE | The Elite Registry</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Tenor+Sans&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { 
-            --stone-100: #f5f5f4; 
-            --stone-800: #292524;
-            --taupe: #a8a29e;
+        :root {
+            --navy-deep: #0B132B;   /* Primary Background */
+            --gold-luxe: #C5A059;   /* Accent */
+            --espresso: #2C1810;    /* Card Borders & Shadows */
+            --cream: #FDFCF0;       /* Text & Light Accents */
         }
-        body { 
-            background-color: white; 
-            color: var(--stone-800); 
-            font-family: 'Inter', sans-serif; 
+        body {
+            background-color: var(--navy-deep);
+            color: var(--cream);
+            font-family: 'Tenor Sans', sans-serif;
+            overflow-x: hidden;
         }
+        .font-luxury { font-family: 'Cinzel', serif; }
         .font-serif { font-family: 'Playfair Display', serif; }
         
-        /* Full screen Hero Background */
-        .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&q=80&w=2070');
-            background-size: cover;
-            background-position: center;
-            height: 85vh;
+        /* Video Background Styling */
+        .video-docker video {
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%; min-height: 100%;
+            z-index: -1;
+            filter: contrast(1.1) brightness(0.6);
+        }
+        .video-overlay {
+            background: linear-gradient(to bottom, rgba(11, 19, 43, 0.4), rgba(11, 19, 43, 0.9));
         }
 
-        .nav-link {
-            font-size: 10px;
-            letter-spacing: 0.2em;
+        /* Glassmorphism Nav */
+        nav {
+            background: rgba(11, 19, 43, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .luxe-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid var(--espresso);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .luxe-card:hover {
+            border-color: var(--gold-luxe);
+            transform: translate(-8px, -8px);
+            box-shadow: 12px 12px 0px var(--gold-luxe);
+        }
+
+        .gold-glow {
+            transition: all 0.4s;
+        }
+        .gold-glow:hover {
+            color: var(--gold-luxe);
+            text-shadow: 0 0 10px rgba(197, 160, 89, 0.5);
+        }
+
+        .btn-luxe {
+            padding: 14px 40px;
+            border: 1px solid var(--gold-luxe);
+            color: var(--gold-luxe);
             text-transform: uppercase;
-            font-weight: 600;
-            color: var(--stone-800);
-            transition: opacity 0.3s;
-        }
-        .nav-link:hover { opacity: 0.5; }
-
-        .btn-outline {
-            border: 1px solid white;
-            padding: 12px 30px;
-            border-radius: 50px;
+            letter-spacing: 5px;
             font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: white;
-            transition: all 0.3s;
+            font-weight: bold;
+            transition: all 0.5s;
+            background: transparent;
         }
-        .btn-outline:hover { background: white; color: black; }
+        .btn-luxe:hover {
+            background: var(--gold-luxe);
+            color: var(--navy-deep);
+            box-shadow: 0 0 40px rgba(197, 160, 89, 0.4);
+        }
 
-        /* Brand logos strip at bottom */
-        .brand-footer {
-            background: #1c1917;
-            padding: 40px 20px;
+        /* Parallax Image Effect */
+        .floating-img {
+            transition: transform 0.5s ease-out;
         }
     </style>
 </head>
 <body>
 
-    <nav class="flex justify-between items-center px-12 py-6 border-b border-stone-100 bg-white sticky top-0 z-50">
-        <div class="flex gap-8">
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Restaurants</a>
-            <a href="#" class="nav-link">Shop</a>
+    <nav class="fixed w-full z-[100] px-12 py-7 flex justify-between items-center">
+        <div class="hidden md:flex gap-12 text-[10px] tracking-[0.4em] uppercase font-bold">
+            <a href="#" class="gold-glow">Curated Menu</a>
+            <a href="#" class="gold-glow">The Estate</a>
+            <a href="#" class="gold-glow">Reservations</a>
         </div>
         
-        <h1 class="text-2xl font-serif tracking-widest uppercase">Lumière</h1>
+        <h1 class="text-4xl font-luxury tracking-[0.4em] text-white">LUMIÈRE</h1>
 
-        <div class="flex gap-8 items-center">
-            <a href="#" class="nav-link">Careers</a>
-            <a href="#" class="nav-link">News</a>
-            <div class="flex gap-4 ml-4">
-                <span class="opacity-30">|</span>
-                <button class="nav-link">Admin</button>
-            </div>
+        <div class="flex gap-10 items-center text-[10px] tracking-[0.4em] uppercase font-bold">
+            <a href="#" class="gold-glow hidden md:block">Boutique</a>
+            <button class="bg-[#C5A059] text-[#0B132B] px-8 py-2 hover:bg-[#FDFCF0] transition-all duration-500"><a href="admin_login.html">ADMIN PORTAL</a></button>
         </div>
     </nav>
 
-    <section class="hero-section flex flex-col items-center justify-center text-center text-white">
-        <h2 class="text-7xl font-serif mb-8 tracking-tight">Our Kitchens</h2>
-        <button class="btn-outline">Book a Table</button>
+    <section class="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden video-docker">
+        <video autoplay muted loop playsinline class="absolute">
+            <source src="https://player.vimeo.com/external/435674703.sd.mp4?s=016c68102607ca72778385312384c50f83617307&profile_id=165" type="video/mp4">
+        </video>
+        <div class="video-overlay absolute inset-0"></div>
+        
+        <div class="relative z-10" data-aos="fade-down" data-aos-duration="2500">
+            <span class="text-[11px] tracking-[1.2em] uppercase text-[#C5A059] mb-8 block font-bold">Est. 2026 • Royal Gastronomy</span>
+            <h2 class="text-7xl md:text-[10rem] font-serif italic mb-12 opacity-95 leading-none">Prestige</h2>
+            <div class="flex flex-col md:flex-row gap-8 justify-center">
+                <button class="btn-luxe">Secure a Table</button>
+                <button class="btn-luxe !border-white !text-white hover:!bg-white hover:!text-black">The Collection</button>
+            </div>
+        </div>
     </section>
 
-    <main class="max-w-7xl mx-auto py-24 px-12">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
-            <div>
-                <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 mb-4 block">Kitchen Intelligence</span>
-                <h3 class="text-4xl font-serif mb-6 leading-tight">Automated Inventory <br>& Real-time Orders.</h3>
-                <p class="text-stone-500 text-sm leading-relaxed mb-8">
-                    Monitor your ingredients, manage table reservations, and track daily sales from a single, minimalist interface designed for elite culinary operations.
+    <main class="max-w-7xl mx-auto py-40 px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center mb-48">
+            <div data-aos="fade-right" data-aos-duration="1500">
+                <h3 class="text-6xl font-luxury mb-10 leading-tight">Masterful <br><span class="italic text-[#C5A059] font-serif">Management.</span></h3>
+                <p class="text-gray-400 text-lg leading-loose mb-12 font-light italic">
+                    Precision isn't just a goal; it's our heritage. Every movement in the kitchen is tracked by <span class="text-[#C5A059]">Lumière Intelligence</span>, allowing our chefs to focus solely on the alchemy of flavor.
                 </p>
-                <div class="flex gap-12">
+                
+                <div class="grid grid-cols-2 gap-12 border-t border-espresso pt-12">
                     <div>
-                        <p class="text-2xl font-serif">14 / 20</p>
-                        <p class="text-[9px] uppercase font-bold text-stone-400">Tables Active</p>
+                        <p class="text-5xl font-serif italic text-[#C5A059]">0.2s</p>
+                        <p class="text-[10px] uppercase tracking-[0.4em] text-gray-500 mt-3 font-bold">Cloud Sync Rate</p>
                     </div>
                     <div>
-                        <p class="text-2xl font-serif text-red-500">03</p>
-                        <p class="text-[9px] uppercase font-bold text-stone-400">Stock Alerts</p>
+                        <p class="text-5xl font-serif italic">100%</p>
+                        <p class="text-[10px] uppercase tracking-[0.4em] text-gray-500 mt-3 font-bold">Provenance Trace</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="bg-stone-50 p-10 rounded-2xl border border-stone-200">
-                <div class="flex justify-between items-center mb-10">
-                    <h4 class="text-xs font-bold uppercase tracking-widest">Live Menu Flux</h4>
-                    <span class="text-[10px] bg-green-100 text-green-700 px-3 py-1 rounded-full uppercase font-bold">Live</span>
-                </div>
-                <div class="space-y-6">
-                    <div class="flex justify-between border-b border-stone-200 pb-4">
-                        <span class="text-sm">Dry Aged Ribeye</span>
-                        <span class="text-sm font-semibold">$58.00</span>
-                    </div>
-                    <div class="flex justify-between border-b border-stone-200 pb-4">
-                        <span class="text-sm">Wild Seabass</span>
-                        <span class="text-sm font-semibold">$42.00</span>
-                    </div>
-                    <div class="flex justify-between border-b border-stone-200 pb-4">
-                        <span class="text-sm">Truffle Risotto</span>
-                        <span class="text-sm font-semibold">$36.00</span>
-                    </div>
-                </div>
+
+            <div class="relative group" data-aos="zoom-in-up" data-aos-duration="1500">
+                <div class="absolute -inset-6 border-2 border-espresso rotate-2 group-hover:rotate-0 transition-all duration-700"></div>
+                <div class="absolute -inset-6 border-2 border-[#C5A059]/30 -rotate-2 group-hover:rotate-0 transition-all duration-1000"></div>
+                <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1974" class="relative z-10 shadow-2xl filter sepia-[0.3] brightness-90 group-hover:sepia-0 transition-all duration-700" alt="Kitchen">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="luxe-card p-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-[#C5A059] text-3xl font-serif italic mb-8">01.</div>
+                <h4 class="text-2xl font-luxury mb-6 tracking-widest uppercase">The Vault</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">End-to-end inventory management for the world's rarest spirits and ingredients.</p>
+                <div class="h-[1px] w-full bg-espresso mb-6"></div>
+                <a href="#" class="text-[9px] tracking-[0.3em] uppercase font-bold text-[#C5A059] hover:underline">Open Inventory</a>
+            </div>
+            <div class="luxe-card p-12" data-aos="fade-up" data-aos-delay="300">
+                <div class="text-[#C5A059] text-3xl font-serif italic mb-8">02.</div>
+                <h4 class="text-2xl font-luxury mb-6 tracking-widest uppercase">Orchestra</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">Visual floor management designed for high-velocity table rotation and VIP arrivals.</p>
+                <div class="h-[1px] w-full bg-espresso mb-6"></div>
+                <a href="#" class="text-[9px] tracking-[0.3em] uppercase font-bold text-[#C5A059] hover:underline">View Floor Map</a>
+            </div>
+            <div class="luxe-card p-12" data-aos="fade-up" data-aos-delay="500">
+                <div class="text-[#C5A059] text-3xl font-serif italic mb-8">03.</div>
+                <h4 class="text-2xl font-luxury mb-6 tracking-widest uppercase">Analytics</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-8">Predictive revenue modeling and server performance metrics in real-time.</p>
+                <div class="h-[1px] w-full bg-espresso mb-6"></div>
+                <a href="#" class="text-[9px] tracking-[0.3em] uppercase font-bold text-[#C5A059] hover:underline">Generate Report</a>
             </div>
         </div>
     </main>
 
-    <footer class="brand-footer">
-        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-            <span class="text-white font-serif text-xl px-4">L'Enclume</span>
-            <span class="text-white font-serif text-xl px-4">Rogan & Co</span>
-            <span class="text-white font-serif text-xl px-4">Aulis</span>
-            <span class="text-white font-serif text-xl px-4">Henrock</span>
-            <span class="text-white font-serif text-xl px-4">Roganic</span>
-            <span class="text-white font-serif text-xl px-4">Our Farm</span>
+    <footer class="bg-[#2C1810] py-32 border-t border-[#C5A059]/20">
+        <div class="max-w-7xl mx-auto px-12 text-center">
+            <h2 class="text-4xl font-luxury tracking-[0.8em] mb-16 text-[#FDFCF0]">LUMIÈRE</h2>
+            <div class="flex flex-wrap justify-center gap-16 opacity-50 hover:opacity-100 transition-opacity duration-1000">
+                <span class="text-xs tracking-[0.3em] uppercase font-bold">London</span>
+                <span class="text-xs tracking-[0.3em] uppercase font-bold">Paris</span>
+                <span class="text-xs tracking-[0.3em] uppercase font-bold">Dubai</span>
+                <span class="text-xs tracking-[0.3em] uppercase font-bold">Singapore</span>
+            </div>
+            <div class="mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[9px] text-gray-500 tracking-[0.4em] uppercase">© 2026 Restaurant Management System</p>
+                <p class="text-[9px] text-gray-500 tracking-[0.4em] uppercase">LUMIÈRE • Five Star Restaurant</p>
+            </div>
         </div>
     </footer>
 
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: false,
+            mirror: true
+        });
+
+        // Mouse move effect for the "astonishing" image movement
+        document.addEventListener('mousemove', (e) => {
+            const imgs = document.querySelectorAll('.group img');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            imgs.forEach(img => {
+                img.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+            });
+        });
+    </script>
 </body>
 </html>
