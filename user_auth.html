@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>LUMIÈRE | Join Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>body { background: #0B132B; color: #FDFCF0; font-family: 'Tenor Sans'; }</style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <div class="w-96 p-10 border border-[#C5A059] bg-white/5 backdrop-blur-xl">
+        <h1 class="text-3xl font-[Cinzel] text-center mb-8 tracking-widest text-[#C5A059]">LUMIÈRE</h1>
+        <div id="authBox">
+            <input id="name" type="text" placeholder="Full Name" class="w-full mb-4 p-3 bg-transparent border border-gray-700 outline-none">
+            <input id="email" type="email" placeholder="Email" class="w-full mb-4 p-3 bg-transparent border border-gray-700 outline-none">
+            <input id="pass" type="password" placeholder="Password" class="w-full mb-6 p-3 bg-transparent border border-gray-700 outline-none">
+            <button onclick="auth('signup')" class="w-full bg-[#C5A059] text-[#0B132B] py-3 font-bold mb-4">SIGN UP</button>
+            <p class="text-center text-xs opacity-50 cursor-pointer" onclick="toggleMode()">Already have an account? Login</p>
+        </div>
+    </div>
+    <script>
+        let mode = 'signup';
+        function toggleMode() {
+            mode = mode === 'signup' ? 'login' : 'signup';
+            document.getElementById('name').style.display = mode === 'login' ? 'none' : 'block';
+        }
+        async function auth(type) {
+            const data = { name: document.getElementById('name').value, email: document.getElementById('email').value, password: document.getElementById('pass').value };
+            const res = await fetch(`http://localhost:5005/api/auth/${mode}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if(res.ok) {
+                if(mode === 'login') {
+                    localStorage.setItem('token', result.token);
+                    localStorage.setItem('userName', result.name);
+                    window.location.href = 'menu.html';
+                } else { alert("Account created! Please login."); toggleMode(); }
+            } else { alert(result.error); }
+        }
+    </script>
+</body>
+</html>
