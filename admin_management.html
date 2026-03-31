@@ -1,33 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>LUMIÈRE | Dashboard</title>
+    <meta charset="UTF-8">
+    <title>LUMIÈRE | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
     <style>
         :root { --navy: #0B132B; --gold: #C5A059; --espresso: #2C1810; --cream: #FDFCF0; }
         body { background: var(--cream); font-family: 'Tenor Sans', sans-serif; }
         .management-card { background: white; border: 1.5px solid var(--espresso); box-shadow: 10px 10px 0px var(--navy); }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link:hover { color: var(--gold); opacity: 1; }
     </style>
 </head>
 <body class="flex min-h-screen">
-    <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059]">
-        <h2 class="font-[Cinzel] text-xl mb-16">LUMIÈRE</h2>
-        <nav class="space-y-8 text-[10px] uppercase font-bold tracking-widest">
-            <a href="#" class="text-[#C5A059] block">Inventory</a>
-            <a href="#" class="opacity-50 block">Orders</a>
+    <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059] flex flex-col">
+        <h2 class="font-[Cinzel] text-xl mb-16 tracking-[0.2em]">LUMIÈRE</h2>
+        <nav class="space-y-8 text-[10px] uppercase font-bold tracking-widest flex-1">
+            <a href="#" class="text-[#C5A059] block nav-link">Inventory</a>
+            <a href="admin_orders.html" class="opacity-50 block nav-link">Orders</a>
+            <a href="admin_reservations.html" class="opacity-50 block nav-link">Reservations</a>
         </nav>
+        <button onclick="logout()" class="mt-auto pt-10 text-[10px] text-red-400 hover:text-white transition uppercase font-bold tracking-widest text-left">
+            Log Out
+        </button>
     </aside>
 
     <main class="flex-1 p-12">
-        <h1 class="text-4xl font-[Cinzel] mb-12">Live Inventory</h1>
+        <header class="flex justify-between items-center mb-12">
+            <h1 class="text-4xl font-[Cinzel]">Live Inventory</h1>
+            <span id="adminName" class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Admin Portal</span>
+        </header>
+
         <div class="management-card p-10">
             <table class="w-full text-left">
-                <thead class="text-[10px] uppercase text-gray-400">
-                    <tr><th>Item</th><th>Stock</th><th>Status</th></tr>
+                <thead class="text-[10px] uppercase text-gray-400 border-b border-gray-100">
+                    <tr>
+                        <th class="pb-4">Item</th>
+                        <th class="pb-4">Stock Level</th>
+                        <th class="pb-4">Status</th>
+                    </tr>
                 </thead>
                 <tbody id="inventoryBody" class="text-sm">
-                    </tbody>
+                    <tr><td colspan="3" class="py-8 text-center text-gray-500 animate-pulse">Synchronizing with Vault...</td></tr>
+                </tbody>
             </table>
         </div>
     </main>
@@ -35,25 +51,59 @@
     <script>
         async function loadInventory() {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5002/api/admin/inventory', {
-                headers: { 'Authorization': token }
-            });
-            if (res.status !== 200) return window.location.href = 'admin_login.html';
-            
-            const items = await res.json();
-            const body = document.getElementById('inventoryBody');
-            body.innerHTML = items.map(item => `
-                <tr class="border-b">
-                    <td class="py-4 font-bold">${item.itemName}</td>
-                    <td class="py-4">${item.stockQuantity} ${item.unit}</td>
-                    <td class="py-4">
-                        <span class="px-3 py-1 text-[8px] font-bold uppercase rounded-full ${item.stockQuantity < item.minLimit ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}">
-                            ${item.stockQuantity < item.minLimit ? 'Low' : 'Optimal'}
-                        </span>
-                    </td>
-                </tr>
-            `).join('');
+            if (!token) {
+                window.location.href = 'admin_login.html';
+                return;
+            }
+
+            try {
+                // CHANGED TO PORT 5005
+                const res = await fetch('http://localhost:5005/api/admin/inventory', {
+                    method: 'GET',
+                    headers: { 
+                        'Authorization': token, 
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (res.status === 401 || res.status === 403) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'admin_login.html';
+                    return;
+                }
+
+                const items = await res.json();
+                const body = document.getElementById('inventoryBody');
+                
+                if (!items || items.length === 0) {
+                    body.innerHTML = '<tr><td colspan="3" class="py-8 text-center text-gray-500 italic">Vault is empty. Please run http://localhost:5005/api/seed</td></tr>';
+                    return;
+                }
+
+                body.innerHTML = items.map(item => `
+                    <tr class="border-b hover:bg-gray-50 transition-colors">
+                        <td class="py-4 font-bold text-[#0B132B] uppercase tracking-tight">${item.itemName}</td>
+                        <td class="py-4 text-gray-600">${item.stockQuantity} ${item.unit || 'units'}</td>
+                        <td class="py-4">
+                            <span class="px-3 py-1 text-[8px] font-bold uppercase rounded-full ${
+                                item.stockQuantity < 10 ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+                            }">
+                                ${item.stockQuantity < 10 ? 'Low Stock' : 'Optimal'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.error("Connection Error:", err);
+                document.getElementById('inventoryBody').innerHTML = '<tr><td colspan="3" class="py-8 text-center text-red-500">Database Connection Failed. Restart Backend.</td></tr>';
+            }
         }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'admin_login.html';
+        }
+
         loadInventory();
     </script>
 </body>
