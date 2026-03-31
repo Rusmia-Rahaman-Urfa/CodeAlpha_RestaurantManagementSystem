@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>LUMIÈRE | Menu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        body { background: #FDFCF0; font-family: 'Tenor Sans'; }
+        .food-card { transition: transform 0.3s; cursor: pointer; }
+        .food-card:hover { transform: translateY(-10px); }
+    </style>
+</head>
+<body>
+    <nav class="bg-[#0B132B] p-6 text-white flex justify-between items-center sticky top-0 z-50">
+        <h1 class="font-[Cinzel] text-2xl tracking-widest">LUMIÈRE MENU</h1>
+        <div class="flex gap-6 items-center">
+            <span id="welcome"></span>
+            <button onclick="location.href='index.html'" class="text-[10px] border border-[#C5A059] px-4 py-2">LOGOUT</button>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto py-16 px-6">
+        <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            </div>
+    </div>
+
+    <script>
+        document.getElementById('welcome').innerText = "Welcome, " + localStorage.getItem('userName');
+        async function loadMenu() {
+            const res = await fetch('http://localhost:5005/api/menu');
+            const items = await res.json();
+            document.getElementById('menuGrid').innerHTML = items.map(item => `
+                <div class="food-card bg-white border border-gray-200 overflow-hidden shadow-sm">
+                    <img src="${item.image}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-[10px] uppercase text-[#C5A059] font-bold">${item.category}</span>
+                        <h3 class="text-xl font-[Cinzel] my-2">${item.name}</h3>
+                        <p class="text-xs text-gray-500 mb-4">${item.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">৳${item.price}</span>
+                            <button onclick="order('${item.name}', ${item.price})" class="bg-[#0B132B] text-white text-[10px] px-4 py-2 hover:bg-[#C5A059]">ORDER NOW</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        async function order(itemName, price) {
+            const res = await fetch('http://localhost:5005/api/orders', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ userName: localStorage.getItem('userName'), items: itemName, totalPrice: price })
+            });
+            if(res.ok) alert("Order for " + itemName + " placed successfully!");
+        }
+        loadMenu();
+    </script>
+</body>
+</html>
