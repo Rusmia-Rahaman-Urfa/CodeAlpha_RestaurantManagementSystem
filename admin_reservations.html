@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LUMIÈRE | Reservations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy: #0B132B; --gold: #C5A059; --espresso: #2C1810; --cream: #FDFCF0; }
+        body { background: var(--cream); font-family: 'Tenor Sans', sans-serif; }
+        .management-card { background: white; border: 1.5px solid var(--espresso); box-shadow: 10px 10px 0px var(--navy); }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link:hover { color: var(--gold); opacity: 1; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+    <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059] flex flex-col">
+        <h2 class="font-[Cinzel] text-xl mb-16 tracking-[0.2em]">LUMIÈRE</h2>
+        <nav class="space-y-8 text-[10px] uppercase font-bold tracking-widest flex-1">
+            <a href="admin_management.html" class="opacity-50 block nav-link">Inventory</a>
+            <a href="admin_orders.html" class="opacity-50 block nav-link">Orders</a>
+            <a href="admin_reservations.html" class="text-[#C5A059] block nav-link">Reservations</a>
+        </nav>
+        <button onclick="logout()" class="mt-auto pt-10 text-[10px] text-red-400 hover:text-white transition uppercase font-bold tracking-widest text-left">Log Out</button>
+    </aside>
+
+    <main class="flex-1 p-12">
+        <header class="flex justify-between items-center mb-12">
+            <h1 class="text-4xl font-[Cinzel]">Guest Registry</h1>
+            <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Maitre D' Access</span>
+        </header>
+
+        <div class="management-card p-10">
+            <table class="w-full text-left">
+                <thead class="text-[10px] uppercase text-gray-400 border-b border-gray-100">
+                    <tr>
+                        <th class="pb-4">Guest Name</th>
+                        <th class="pb-4">Time</th>
+                        <th class="pb-4">Guests</th>
+                        <th class="pb-4">Notes</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="border-b">
+                        <td class="py-4 font-bold text-[#0B132B]">Professor Rahman</td>
+                        <td class="py-4">20:30</td>
+                        <td class="py-4">4</td>
+                        <td class="py-4 text-gray-500 italic">Window Seating Preferred</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-4 font-bold text-[#0B132B]">The Hult Team</td>
+                        <td class="py-4">19:00</td>
+                        <td class="py-4">6</td>
+                        <td class="py-4 text-gray-500 italic">Anniversary Celebration</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
+    </script>
+</body>
+</html>
