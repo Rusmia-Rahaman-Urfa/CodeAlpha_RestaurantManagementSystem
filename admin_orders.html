@@ -9,56 +9,55 @@
         :root { --navy: #0B132B; --gold: #C5A059; --espresso: #2C1810; --cream: #FDFCF0; }
         body { background: var(--cream); font-family: 'Tenor Sans', sans-serif; }
         .management-card { background: white; border: 1.5px solid var(--espresso); box-shadow: 10px 10px 0px var(--navy); }
-        .nav-link { transition: all 0.3s ease; }
-        .nav-link:hover { color: var(--gold); opacity: 1; }
     </style>
 </head>
 <body class="flex min-h-screen">
     <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059] flex flex-col">
         <h2 class="font-[Cinzel] text-xl mb-16 tracking-[0.2em]">LUMIÈRE</h2>
         <nav class="space-y-8 text-[10px] uppercase font-bold tracking-widest flex-1">
-            <a href="admin_management.html" class="opacity-50 block nav-link">Inventory</a>
-            <a href="admin_orders.html" class="text-[#C5A059] block nav-link">Orders</a>
-            <a href="admin_reservations.html" class="opacity-50 block nav-link">Reservations</a>
+            <a href="admin_management.html" class="opacity-50 block hover:text-[#C5A059]">Inventory</a>
+            <a href="admin_orders.html" class="text-[#C5A059] block">Orders</a>
+            <a href="admin_reservations.html" class="opacity-50 block hover:text-[#C5A059]">Reservations</a>
         </nav>
-        <button onclick="logout()" class="mt-auto pt-10 text-[10px] text-red-400 hover:text-white transition uppercase font-bold tracking-widest text-left">Log Out</button>
+        <button onclick="logout()" class="mt-auto text-red-400 text-[10px] font-bold uppercase tracking-widest">Log Out</button>
     </aside>
 
     <main class="flex-1 p-12">
         <header class="flex justify-between items-center mb-12">
             <h1 class="text-4xl font-[Cinzel]">Live Orders</h1>
-            <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Kitchen Display System</span>
+            <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Kitchen Display</span>
         </header>
 
         <div class="management-card p-10">
             <table class="w-full text-left">
                 <thead class="text-[10px] uppercase text-gray-400 border-b border-gray-100">
-                    <tr>
-                        <th class="pb-4">Order ID</th>
-                        <th class="pb-4">Table</th>
-                        <th class="pb-4">Items</th>
-                        <th class="pb-4">Status</th>
-                    </tr>
+                    <tr><th class="pb-4">Order ID</th><th class="pb-4">Table</th><th class="pb-4">Items</th><th class="pb-4">Status</th></tr>
                 </thead>
-                <tbody class="text-sm">
-                    <tr class="border-b">
-                        <td class="py-4 font-bold text-[#0B132B]">#LM-9021</td>
-                        <td class="py-4">Table 12 (VIP)</td>
-                        <td class="py-4 text-gray-600">Wagyu Beef x2, Vintage Wine</td>
-                        <td class="py-4"><span class="px-3 py-1 text-[8px] font-bold uppercase rounded-full bg-amber-100 text-amber-600">Preparing</span></td>
-                    </tr>
-                    <tr class="border-b">
-                        <td class="py-4 font-bold text-[#0B132B]">#LM-9022</td>
-                        <td class="py-4">Table 04</td>
-                        <td class="py-4 text-gray-600">Truffle Oil Pasta, Champagne</td>
-                        <td class="py-4"><span class="px-3 py-1 text-[8px] font-bold uppercase rounded-full bg-blue-100 text-blue-600">In Queue</span></td>
-                    </tr>
-                </tbody>
+                <tbody id="ordersBody" class="text-sm"></tbody>
             </table>
         </div>
     </main>
-    <script>
-        function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
-    </script>
+
+<script>
+    async function loadOrders() {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:5005/api/admin/orders', {
+            headers: { 'Authorization': token }
+        });
+        const orders = await res.json();
+        document.getElementById('ordersBody').innerHTML = orders.map(o => `
+            <tr class="border-b">
+                <td class="py-4 font-bold">#${o._id.slice(-5).toUpperCase()}</td>
+                <td class="py-4">${o.customerName || 'Guest'}</td>
+                <td class="py-4">${o.items}</td>
+                <td class="py-4">
+                    <span class="px-3 py-1 text-[8px] font-bold uppercase rounded-full bg-amber-100 text-amber-600">${o.status}</span>
+                </td>
+            </tr>
+        `).join('');
+    }
+    window.onload = loadOrders;
+    function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
+</script>
 </body>
 </html>
