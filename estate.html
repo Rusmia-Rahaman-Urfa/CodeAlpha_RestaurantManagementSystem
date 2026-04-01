@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LUMIÈRE | The Estate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0B132B; color: #FDFCF0; font-family: 'Tenor Sans'; }
+        .img-luxe { filter: grayscale(50%); transition: 0.5s; cursor: pointer; border: 1px solid #C5A059; }
+        .img-luxe:hover { filter: grayscale(0%); transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <nav class="p-10 flex justify-between items-center border-b border-[#C5A059]/20">
+        <h1 class="font-[Cinzel] text-2xl tracking-[0.4em] cursor-pointer" onclick="location.href='index.html'">LUMIÈRE</h1>
+        <a href="index.html" class="text-[10px] tracking-[0.3em] border border-[#C5A059] px-6 py-2">BACK</a>
+    </nav>
+
+    <div class="max-w-6xl mx-auto py-20 px-6 text-center">
+        <span class="text-[#C5A059] text-[10px] tracking-[1em] uppercase mb-4 block">The Atmosphere</span>
+        <h2 class="font-[Cinzel] text-5xl mb-12">The Estate</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800" class="img-luxe h-80 w-full object-cover">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800" class="img-luxe h-80 w-full object-cover">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800" class="img-luxe h-80 w-full object-cover">
+            <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80" class="img-luxe h-80 w-full object-cover">
+        </div>
+    </div>
+</body>
+</html>
