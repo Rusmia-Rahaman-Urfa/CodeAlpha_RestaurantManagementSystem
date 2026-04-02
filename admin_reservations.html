@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LUMIÈRE | Reservations</title>
+    <title>LUMIÈRE | Admin Reservations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Tenor+Sans&display=swap" rel="stylesheet">
     <style>
@@ -12,17 +12,19 @@
     </style>
 </head>
 <body class="flex min-h-screen">
-    <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059] flex flex-col">
-        <h2 class="font-[Cinzel] text-xl mb-16 tracking-[0.2em]">LUMIÈRE</h2>
+    <aside class="w-64 bg-[#0B132B] text-white p-8 border-r-2 border-[#C5A059] flex flex-col fixed h-full">
+        <h2 class="font-[Cinzel] text-xl mb-16 tracking-[0.2em] cursor-pointer" onclick="location.href='index.html'">LUMIÈRE</h2>
         <nav class="space-y-8 text-[10px] uppercase font-bold tracking-widest flex-1">
             <a href="admin_management.html" class="opacity-50 block hover:text-[#C5A059]">Inventory</a>
             <a href="admin_orders.html" class="opacity-50 block hover:text-[#C5A059]">Orders</a>
             <a href="admin_reservations.html" class="text-[#C5A059] block">Reservations</a>
+            <hr class="border-[#C5A059]/20 my-4">
+            <a href="index.html" class="opacity-50 block hover:text-[#C5A059]">View Website</a>
         </nav>
-        <button onclick="logout()" class="mt-auto text-red-400 text-[10px] font-bold uppercase tracking-widest">Log Out</button>
+        <button onclick="logout()" class="mt-auto text-red-400 text-[10px] font-bold uppercase tracking-widest hover:underline">Log Out</button>
     </aside>
 
-    <main class="flex-1 p-12">
+    <main class="flex-1 ml-64 p-12">
         <header class="flex justify-between items-center mb-12">
             <h1 class="text-4xl font-[Cinzel]">Guest Registry</h1>
             <span class="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Maitre D' Access</span>
@@ -41,18 +43,20 @@
 <script>
     async function loadReservations() {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5005/api/admin/reservations', {
-            headers: { 'Authorization': token }
-        });
-        const reservations = await res.json();
-        document.getElementById('resBody').innerHTML = reservations.map(r => `
-            <tr class="border-b">
-                <td class="py-4 font-bold text-[#0B132B]">${r.customerName || 'Anonymous'}</td>
-                <td class="py-4">${r.time}</td>
-                <td class="py-4">${r.guests || 2}</td>
-                <td class="py-4 text-gray-500 italic">${r.notes || 'Confirmed'}</td>
-            </tr>
-        `).join('');
+        try {
+            const res = await fetch('http://localhost:5005/api/admin/reservations', {
+                headers: { 'Authorization': token }
+            });
+            const reservations = await res.json();
+            document.getElementById('resBody').innerHTML = reservations.map(r => `
+                <tr class="border-b">
+                    <td class="py-4 font-bold text-[#0B132B]">${r.customerName || 'Anonymous'}</td>
+                    <td class="py-4">${r.time}</td>
+                    <td class="py-4">${r.guests || 2}</td>
+                    <td class="py-4 text-gray-500 italic">${r.notes || 'Confirmed'}</td>
+                </tr>
+            `).join('');
+        } catch (e) { console.error("Reservations failed", e); }
     }
     window.onload = loadReservations;
     function logout() { localStorage.removeItem('token'); window.location.href = 'admin_login.html'; }
