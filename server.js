@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
-// Importing exactly as per your schemas.js exports
-const { User, Menu, Inventory, Table, Order } = require('./schemas'); 
+const { User, Menu, Inventory, Reservation, Order } = require('./schemas'); 
 
 const app = express();
 app.use(express.json());
@@ -13,13 +12,10 @@ app.use(cors());
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// SEED ROUTE - Creates Admin + 50 Food Items
 app.get('/api/seed', async (req, res) => {
     try {
         await User.deleteOne({ email: "rusmiarahaman77461@gmail.com" });
         await Menu.deleteMany({});
-        
-        // Create Admin
         const hashedPassword = await bcrypt.hash("admin123", 10);
         await User.create({
             name: "Lumiere Admin",
@@ -27,8 +23,6 @@ app.get('/api/seed', async (req, res) => {
             password: hashedPassword,
             role: "admin"
         });
-
-        // Generate 50 items (Chinese, Italian, Pakistani)
         const foodItems = [];
         const categories = ['Chinese', 'Italian', 'Pakistani'];
         for (let i = 1; i <= 50; i++) {
@@ -42,12 +36,10 @@ app.get('/api/seed', async (req, res) => {
             });
         }
         await Menu.insertMany(foodItems);
-
-        res.send("<h1>✅ Seed Successful</h1><p>Admin created and 50 dishes added to Menu.</p>");
+        res.send("<h1>✅ Seed Successful</h1>");
     } catch (err) { res.status(500).send("Seed Error: " + err.message); }
 });
 
-// AUTHENTICATION
 app.post('/api/auth/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -69,7 +61,6 @@ app.post('/api/auth/login', async (req, res) => {
     } catch (err) { res.status(500).json({ error: "Login failed" }); }
 });
 
-// MIDDLEWARE
 const verifyAdmin = (req, res, next) => {
     const token = req.headers['authorization'];
     if (!token) return res.status(403).json({ error: "No token provided" });
@@ -80,7 +71,6 @@ const verifyAdmin = (req, res, next) => {
     });
 };
 
-// DATA FETCHING
 app.get('/api/menu', async (req, res) => {
     try { res.json(await Menu.find()); } catch (err) { res.status(500).json({ error: "Fetch failed" }); }
 });
@@ -90,10 +80,9 @@ app.get('/api/admin/orders', verifyAdmin, async (req, res) => {
 });
 
 app.get('/api/admin/reservations', verifyAdmin, async (req, res) => {
-    try { res.json(await Table.find()); } catch (err) { res.status(500).json({ error: "Fetch failed" }); }
+    try { res.json(await Reservation.find().sort({ createdAt: -1 })); } catch (err) { res.status(500).json({ error: "Fetch failed" }); }
 });
 
-// USER ACTION ROUTES
 app.post('/api/orders', async (req, res) => {
     try {
         const o = new Order(req.body);
@@ -104,21 +93,12 @@ app.post('/api/orders', async (req, res) => {
 
 app.post('/api/reservations', async (req, res) => {
     try {
-        const { tableNumber, customerName, time } = req.body;
-        await Table.findOneAndUpdate(
-            { tableNumber },
-            { $push: { reservations: { customerName, time } }, isAvailable: false }
-        );
+        const r = new Reservation(req.body);
+        await r.save();
         res.json({ success: true });
     } catch (err) { res.status(500).json(err); }
 });
 
-// CONNECTION LOGIC (UNTOUCHED)
 const PORT = process.env.PORT || 5005;
-app.listen(PORT, () => {
-    console.log(`🚀 SERVER RUNNING ON: http://localhost:${PORT}`);
-});
-
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("💎 MongoDB Connected"))
-    .catch(err => console.log("❌ DB Connection Failed"));
+app.listen(PORT, () => console.log(`🚀 Server: http://localhost:${PORT}`));
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("💎 MongoDB Connected"));
