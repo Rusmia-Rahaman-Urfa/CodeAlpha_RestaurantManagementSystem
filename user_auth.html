@@ -20,7 +20,7 @@
     <script>
         let mode = 'signup';
         function toggleMode() {
-            mode = mode === 'signup' ? 'login' : 'signup';
+            mode = mode === 'signup' ? 'login': 'signup';
             document.getElementById('name').style.display = mode === 'login' ? 'none' : 'block';
         }
         async function auth(type) {
