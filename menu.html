@@ -8,50 +8,67 @@
         body { background: #FDFCF0; font-family: 'Tenor Sans'; }
         .food-card { transition: transform 0.3s; cursor: pointer; }
         .food-card:hover { transform: translateY(-10px); }
+        .gold-glow:hover { color: #C5A059; text-shadow: 0 0 8px rgba(197, 160, 89, 0.4); }
     </style>
 </head>
 <body>
-    <nav class="bg-[#0B132B] p-6 text-white flex justify-between items-center sticky top-0 z-50">
-        <h1 class="font-[Cinzel] text-2xl tracking-widest">LUMIÈRE MENU</h1>
-        <div class="flex gap-6 items-center">
-            <span id="welcome"></span>
-            <button onclick="location.href='index.html'" class="text-[10px] border border-[#C5A059] px-4 py-2">LOGOUT</button>
+    <nav class="fixed w-full z-[100] px-12 py-6 flex justify-between items-center bg-[#0B132B] border-b border-[#C5A059]/20">
+        <h1 class="text-2xl font-[Cinzel] tracking-[0.4em] text-white cursor-pointer" onclick="location.href='index.html'">LUMIÈRE</h1>
+        <div class="hidden md:flex gap-10 text-[10px] tracking-[0.3em] uppercase font-bold text-white">
+            <a href="index.html" class="gold-glow transition-colors">Home</a>
+            <a href="menu.html" class="text-[#C5A059]">Menu</a>
+            <a href="reservations.html" class="gold-glow transition-colors">Reservations</a>
+            <a href="estate.html" class="gold-glow transition-colors">The Estate</a>
+        </div>
+        <div class="flex items-center gap-6">
+            <span id="welcome" class="text-[9px] text-[#C5A059] uppercase tracking-widest hidden sm:block"></span>
+            <button onclick="logout()" class="text-[10px] text-white border border-[#C5A059]/50 px-5 py-2 hover:bg-[#C5A059] hover:text-[#0B132B] transition-all font-bold uppercase">Logout</button>
         </div>
     </nav>
 
-    <div class="max-w-7xl mx-auto py-16 px-6">
-        <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            </div>
+    <div class="max-w-7xl mx-auto pt-32 pb-16 px-6">
+        <div id="menuGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
     </div>
 
-    <script>
-        document.getElementById('welcome').innerText = "Welcome, " + localStorage.getItem('userName');
-        async function loadMenu() {
-            const res = await fetch('http://localhost:5005/api/menu');
-            const items = await res.json();
-            document.getElementById('menuGrid').innerHTML = items.map(item => `
-                <div class="food-card bg-white border border-gray-200 overflow-hidden shadow-sm">
-                    <img src="${item.image}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-[10px] uppercase text-[#C5A059] font-bold">${item.category}</span>
-                        <h3 class="text-xl font-[Cinzel] my-2">${item.name}</h3>
-                        <p class="text-xs text-gray-500 mb-4">${item.description}</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-lg">৳${item.price}</span>
-                            <button onclick="order('${item.name}', ${item.price})" class="bg-[#0B132B] text-white text-[10px] px-4 py-2 hover:bg-[#C5A059]">ORDER NOW</button>
-                        </div>
+<script>
+    const userName = localStorage.getItem('userName');
+    document.getElementById('welcome').innerText = userName ? "Guest: " + userName : "";
+    
+    async function loadMenu() {
+        const res = await fetch('http://localhost:5005/api/menu');
+        const items = await res.json();
+        document.getElementById('menuGrid').innerHTML = items.map(item => `
+            <div class="food-card bg-white border border-gray-200 overflow-hidden shadow-sm">
+                <img src="${item.image}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <span class="text-[10px] uppercase text-[#C5A059] font-bold">${item.category}</span>
+                    <h3 class="text-xl font-[Cinzel] my-2">${item.name}</h3>
+                    <p class="text-xs text-gray-500 mb-4">${item.description}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-lg">৳${item.price}</span>
+                        <button onclick="order('${item.name}', ${item.price})" class="bg-[#0B132B] text-white text-[10px] px-4 py-2 hover:bg-[#C5A059]">ORDER NOW</button>
                     </div>
                 </div>
-            `).join('');
-        }
-        async function order(itemName, price) {
-            const res = await fetch('http://localhost:5005/api/orders', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ userName: localStorage.getItem('userName'), items: itemName, totalPrice: price })
-            });
-            if(res.ok) alert("Order for " + itemName + " placed successfully!");
-        }
-        loadMenu();
-    </script>
+            </div>
+        `).join('');
+    }
+
+    async function order(itemName, price) {
+        const orderData = { 
+            customerName: localStorage.getItem('userName'), 
+            items: itemName, 
+            totalPrice: price,
+            table: "Table " + Math.floor(Math.random() * 10 + 1)
+        };
+        const res = await fetch('http://localhost:5005/api/orders', {
+            method: 'POST', 
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(orderData)
+        });
+        if(res.ok) alert("Order for " + itemName + " placed successfully!");
+    }
+    function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+    loadMenu();
+</script>
 </body>
 </html>
