@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMIÈRE | Reservations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy-deep: #0B132B; --gold-luxe: #C5A059; --cream: #FDFCF0; }
+        body { background-color: var(--navy-deep); color: var(--cream); font-family: 'Tenor Sans', sans-serif; }
+        .luxe-input { background: transparent; border-bottom: 2px solid rgba(197, 160, 89, 0.3); color: white; padding: 12px 0; width: 100%; outline: none; transition: 0.4s; font-size: 14px; }
+        .luxe-input:focus { border-color: var(--gold-luxe); transform: translateY(-2px); }
+        .luxe-label { display: block; text-transform: uppercase; letter-spacing: 3px; font-size: 10px; color: var(--gold-luxe); margin-bottom: 8px; font-weight: bold; }
+        .btn-luxe-submit { background: transparent; border: 1px solid var(--gold-luxe); color: var(--gold-luxe); padding: 15px 50px; text-transform: uppercase; letter-spacing: 5px; font-size: 12px; transition: 0.5s; cursor: pointer; }
+        .btn-luxe-submit:hover { background: var(--gold-luxe); color: var(--navy-deep); box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); }
+        .gold-glow:hover { color: #C5A059; text-shadow: 0 0 8px rgba(197, 160, 89, 0.4); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <nav class="fixed w-full z-[100] px-12 py-6 flex justify-between items-center bg-[#0B132B]/90 backdrop-blur-md border-b border-[#C5A059]/20">
+        <h1 class="text-2xl font-[Cinzel] tracking-[0.4em] text-white cursor-pointer" onclick="location.href='index.html'">LUMIÈRE</h1>
+        <div class="hidden md:flex gap-10 text-[10px] tracking-[0.3em] uppercase font-bold text-white">
+            <a href="index.html" class="gold-glow transition-colors">Home</a>
+            <a href="menu.html" class="gold-glow transition-colors">Menu</a>
+            <a href="reservations.html" class="text-[#C5A059]">Reservations</a>
+            <a href="estate.html" class="gold-glow transition-colors">The Estate</a>
+        </div>
+        <div class="flex items-center gap-6">
+            <span id="welcome" class="text-[9px] text-[#C5A059] uppercase tracking-widest hidden sm:block"></span>
+            <button onclick="logout()" class="text-[10px] text-white border border-[#C5A059]/50 px-5 py-2 hover:bg-[#C5A059] hover:text-[#0B132B] transition-all font-bold uppercase">Logout</button>
+        </div>
+    </nav>
+
+    <main class="flex-1 flex items-center justify-center pt-40 pb-20 px-6">
+        <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div data-aos="fade-right" data-aos-duration="1500">
+                <span class="text-[11px] tracking-[1.0em] uppercase text-[#C5A059] mb-4 block font-bold">Registry Portal</span>
+                <h2 class="text-6xl font-[Cinzel] mb-8 leading-tight text-white">Secure <br>Your <span class="italic text-[#C5A059]">Table.</span></h2>
+                <p class="text-gray-400 text-sm leading-loose mb-12 font-light italic">Reservations are the key to unlocking royal flavors.</p>
+            </div>
+            <div class="p-12 shadow-2xl bg-white/5 border border-white/10" data-aos="fade-left" data-aos-duration="1800">
+                <form id="dynamicResForm" class="space-y-10">
+                    <div class="relative group"><label class="luxe-label">MEMBER NAME</label><input type="text" id="custName" class="luxe-input" required></div>
+                    <div class="relative group"><label class="luxe-label">DATE & TIME</label><input type="datetime-local" id="resDateTime" class="luxe-input" required></div>
+                    <div class="grid grid-cols-2 gap-10">
+                        <div><label class="luxe-label">GUESTS</label><input type="number" id="resGuests" min="1" max="10" class="luxe-input" value="2"></div>
+                        <div><label class="luxe-label">STATUS</label><select id="resStatus" class="luxe-input text-[10px] text-gray-400"><option>Confirmed</option><option>VIP Request</option></select></div>
+                    </div>
+                    <div class="pt-8 text-center"><button type="submit" id="submitBtn" class="btn-luxe-submit font-[Cinzel]">REQUEST REGISTRY</button></div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        AOS.init();
+        const userName = localStorage.getItem('userName');
+        document.getElementById('welcome').innerText = userName ? "Guest: " + userName : "";
+        if (userName) document.getElementById('custName').value = userName;
+
+        document.getElementById('dynamicResForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "AUTHENTICATING...";
+            const dt = document.getElementById('resDateTime').value.split('T');
+            const data = {
+                customerName: document.getElementById('custName').value,
+                time: `DATE: ${dt[0]} / TIME: ${dt[1]}`,
+                guests: document.getElementById('resGuests').value,
+                notes: document.getElementById('resStatus').value
+            };
+            try {
+                const res = await fetch('http://localhost:5005/api/reservations', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+                });
+                if (res.ok) { alert("Registry Created!"); window.location.href = "index.html"; }
+            } catch (err) { alert("Server Connection Failed"); }
+            btn.innerText = "REQUEST REGISTRY";
+        };
+        function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+    </script>
+</body>
+</html>
