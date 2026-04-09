@@ -73,6 +73,8 @@ Lumière Prestige serves as a bridge between luxury hospitality and modern techn
 
 ### 🔗 Relevant Links
 * **LinkedIn Vedio Link**: (https://www.linkedin.com/posts/rusmia-rahaman-urfa_taskno2-fullstackdevelopment-mernstack-activity-7445527980967309312-M8Xm?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEo5PDwBc3YGuCYsTAP-hRRKNUoiZejH1U8)
+  
+*  **Live Demo**: https://lumiere-restaurant-rus07.netlify.app/
 
 
 ---
